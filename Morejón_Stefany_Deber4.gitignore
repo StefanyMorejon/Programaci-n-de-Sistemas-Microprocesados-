@@ -1,0 +1,92 @@
+#include <LiquidCrystal.h>
+LiquidCrystal lcd (9, 8, 7, 6, 5, 4);
+int i = 16;
+int j = 0;
+int a = 0;
+int b = 0;
+int tamano;
+String dato;
+void setup() {
+  lcd.begin(16, 2);
+  Serial.begin(9600);
+  attachInterrupt(0, INTP, CHANGE);
+  attachInterrupt(1, INTS, CHANGE);
+}
+
+void loop() {
+  if (a == 1) {
+    lcd.setCursor(0, 1);
+    lcd.print(" Ingreso ");
+    delay(2000);
+    Serial.println("Seleccione un Juego");
+    delay(2000);
+    if (b == 1) {
+      lcd.setCursor(10, 1);
+      lcd.print("Juego1");
+      Serial.println("Ingrese una palabra");
+      delay(2000);
+      dato = Serial.readString();
+      juego1(dato);
+      Serial.println("");
+    }
+    else {
+      lcd.setCursor(10, 1);
+      lcd.print("Juego2");
+      Serial.println("Ingrese una palabra");
+      delay(2000);
+      dato = Serial.readString();
+     juego2(dato);
+      Serial.println("");
+
+    }
+  }
+  else{
+    lcd.clear();
+  }
+}
+
+void INTP() {
+  a= 1 - b;
+}
+void INTS() {
+  a= 1 - b;
+}
+void eliminar() {
+
+  for (; i >= 0; i--) {
+    lcd.setCursor(i, 0);
+    lcd.print(' ');
+  }
+  i = 16;
+
+}
+void juego1(String letra) {
+
+  tamano = letra.length();
+  char vector[tamano + 1];
+  letra.toCharArray(vector, tamano + 1);
+  for (; j < tamano; j++) {
+    lcd.setCursor(j, 0);
+    lcd.print(vector[j]);
+    delay(200);
+    eliminar();
+  }
+  j = 0;
+}
+void juego2(String letras) {
+
+  tamano = letras.length();
+  char vector[tamano + 1];
+  letras.toCharArray(vector, tamano + 1);
+
+  for (; j < tamano; j++) {
+    lcd.setCursor(j, 0);
+    lcd.print(vector[j]);
+    delay(200);
+  }
+  for (; j >= 0; j--) {
+    lcd.setCursor(j, 0);
+    lcd.print(' ');
+    delay(200);
+  }
+}
